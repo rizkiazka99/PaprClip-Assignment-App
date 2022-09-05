@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.paprclipassignmentapp">
-   <application
-        android:label="paprclipassignmentapp"
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <application
+        android:label="PaprClip Assignment App"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
