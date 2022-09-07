@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:get/get_connect/http/src/status/http_status.dart';
 
 class ApiProvider {
-  String baseUrl = 'https://api.stockedge.com/Api/SecurityDashboardApi/';
+  String baseUrl = 'https://api.stockedge.com/Api/';
   Dio dio = Dio();
 
   getResponse(statusCode, error, message, data) {
@@ -81,10 +81,14 @@ class ApiProvider {
   }
 
   Future getSecurity() async {
-    return await dioGet('GetCompanyEquityInfoForSecurity/5051?lang=en');
+    return await dioGet('SecurityDashboardApi/GetCompanyEquityInfoForSecurity/5051?lang=en');
   }
 
   Future getSecurityPerformance() async {
-    return await dioGet('GetTechnicalPerformanceBenchmarkForSecurity/5051?lang=en');
+    return await dioGet('SecurityDashboardApi/GetTechnicalPerformanceBenchmarkForSecurity/5051?lang=en');
+  }
+
+  Future getLatestListingPrice() async {
+    return await dioGet('LatestListingPriceDashboardApi/GetLatestListingPrice/5866?lang=en');
   }
 }

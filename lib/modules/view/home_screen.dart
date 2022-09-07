@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:paprclipassignmentapp/core/values/colors.dart';
 import 'package:paprclipassignmentapp/core/values/fonts.dart';
+import 'package:paprclipassignmentapp/data/models/latest_listing_price_response.dart';
 import 'package:paprclipassignmentapp/modules/controller/home_controller.dart';
 import 'package:paprclipassignmentapp/modules/widget/skeleton_loader.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
@@ -59,6 +60,123 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Text(
+                    'Listing Price',
+                    style: h4(color: contextRed),
+                  ),
+                  const Divider(
+                    thickness: 2,
+                    color: contextRed,
+                  ),
+                  StreamBuilder<LatestListingPriceResponse?>(
+                    stream: controller.getRealtimeListingPrice(),
+                    builder: (context, snapshot) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting:
+                          return const SkeletonLoader();
+                        default:
+                          if (snapshot.hasError) {
+                            print(snapshot.error);
+                            return Center(
+                              child: Column(
+                                children: [
+                                  const Icon(
+                                    Icons.error,
+                                    size: 70,
+                                    color: contextRed,
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    'Sorry, an error occured',
+                                    style: bodyLg(),
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else if (!snapshot.hasData) {
+                            return Center(
+                              child: Column(
+                                children: [
+                                  const Icon(
+                                    Icons.search_off,
+                                    size: 70,
+                                    color: contextRed,
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    'No data was retrieved',
+                                    style: bodyLg(),
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else {
+                            return Center(
+                              child: Column(
+                                children: [
+                                  Text(
+                                    snapshot.data!.o.toString(),
+                                    style: bodyLg(),
+                                  ),
+                                  const SizedBox(height: 3),
+                                  Text(
+                                    '${snapshot.data!.cz.toString()} (${snapshot.data!.czg.toString()} %)',
+                                    style: bodyLg(
+                                    color: snapshot.data!.cz.toString().contains('-') && 
+                                        snapshot.data!.czg.toString().contains('-') ? 
+                                        contextRed : contextGreen
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'High',
+                                        style: bodyMd(color: Colors.black),
+                                      ),
+                                      Text(
+                                        snapshot.data!.h.toString(),
+                                        style: bodyMd(color: Colors.black),
+                                      )
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Low',
+                                        style: bodyMd(color: Colors.black),
+                                      ),
+                                      Text(
+                                        snapshot.data!.l.toString(),
+                                        style: bodyMd(color: Colors.black),
+                                      )
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Volume',
+                                        style: bodyMd(color: Colors.black),
+                                      ),
+                                      Text(
+                                        snapshot.data!.tq.toString(),
+                                        style: bodyMd(color: Colors.black),
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                            );
+                          }
+                      }   
+                    }
+                  ),
+                  const SizedBox(height: 16),
                   Text(
                     'Overview',
                     style: h4(color: contextRed),
